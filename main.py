@@ -34,7 +34,8 @@ class reptile(object):
             station_pym = station_str.split("|")[-2] #站点拼音码
             station_i = station(station_name,station_pym)
             station_i.dbm = station_str.split("|")[2]
-            station_i.get_more_infor()
+            station_i.get_tmis()
+            station_i.get_province()
             station_i.tosql()
             
             print(station_name+'   '+station_i.tmis+"   "+station_i.province+'  '+station_i.dbm+'  done.')

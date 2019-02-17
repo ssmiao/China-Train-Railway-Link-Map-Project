@@ -13,8 +13,8 @@ class station(object):#todo:添加经纬坐标
         self.tmis = tmis
         self.dbm = dbm
         self.province = province
-        if(tmis == ''):
-            self.get_tmis()
+        # if(tmis == ''):
+        self.get_tmis()
         
     #get_*是封装来自emu-tools的代码
     def get_tmis(self):
@@ -37,7 +37,7 @@ class station(object):#todo:添加经纬坐标
             if(self.station_name == k):
                 self.tmis = v
 
-    def get_more_infor(self):
+    def get_province(self):
         try:
             if(self.pym != ''):
                 pinyin = self.pym
@@ -45,13 +45,7 @@ class station(object):#todo:添加经纬坐标
                 params = dict(param=pinyin, type=1, czlx=0)
                 response = requests.post(url, params)
                 results = json.loads(response.text)
-                
-                # if len(results) < 100:
-                #     pass
-                # else:
-                #     #Load recursively when the API limit is exceeded.
-                #     results =  results.append(sum((get_more_infor(pinyin + c) for c in alphabet), []))
-                
+
                 for result in results:
                     if(self.station_name == result['ZMHZ']):
                         self.province = result['SSJC']

@@ -26,6 +26,14 @@ class sql(object):
     def close(self):
         self._db.close()
     
+    #自定义发送内容
+    def send(self,infomation):
+        self._cursor.execute(infomation)
+        self._db.commit()
+        rev_data = self._cursor.fetchall()
+
+        return rev_data
+
     #加入火车线路信息到数据库
     def addline(self,pym,train_name,first_site,terminus,viasite):
         pass#INSERT INTO 表名称 VALUES (值1, 值2,....)
@@ -36,7 +44,7 @@ class sql(object):
         #去重加入新站点信息
         self._cursor.execute('INSERT INTO Stations (Station) VALUES (\''+station_name +'\') ON DUPLICATE KEY UPDATE stationId = stationId;')
         self._db.commit()
-        
+    
         #更新pym拼音码信息
         if(pym != ''):
             self._cursor.execute('UPDATE Stations SET PYM = \''+ pym +'\' WHERE Station = \''+station_name+'\';')
