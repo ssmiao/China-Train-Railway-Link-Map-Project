@@ -7,7 +7,7 @@ user = 'CNTrain'
 password = 'password'
 db = 'CNTrain'
 port=3306
-#########
+##########
 
 class sql(object):
     def __init__(self,host= '127.0.0.1',port=3306,user='CNTrain',password= 'password',dbname= 'CNTrain'):
