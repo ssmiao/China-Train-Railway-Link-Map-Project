@@ -41,7 +41,11 @@ CREATE TABLE `Trains` (
   PRIMARY KEY (`RouteId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ```
-### 开源说明
+
+### 网络说明
+你可能需要可以自由的访问维基百科才可以使用部分功能。
+
+## 开源说明
 
 特别感谢Arnie97提供的使用MIT协议的开源项目emu-tools https://github.com/Arnie97/emu-tools 本项目部分使用了来自该项目提供的接口和代码。
 
