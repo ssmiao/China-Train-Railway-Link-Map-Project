@@ -4,35 +4,44 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 class wikipedia(object):
-    def __init__(self,station_name,base_url = 'https://zh.wikipedia.org/wiki/',html=''):
+    def __init__(self,station_name,base_url = 'https://zh.wikipedia.org/wiki/',html='',have_looked = 0):
         self.station_name = station_name
         self.base_url = base_url
+        self.have_looked = have_looked
+        self.longitude = 0
+        self.latitude = 0
         
     def find_page(self):
-        # print("喵")
         try :
-            # print("喵")
             self.html = urlopen(self.base_url+quote(self.station_name+'站')).read().decode('utf-8')
         except urllib.error.URLError:
             try:
                 self.html = urlopen(self.base_url+quote(self.station_name+'乘降所')).read().decode('utf-8')
             except urllib.error.URLError:
                 self.html = ''
-        # return html
+        self.have_looked = 1
+        self.soup = BeautifulSoup(self.html,features="lxml")
 
-    def reptile(self):
-        self.find_page()
-        print("喵")
-        if(self.html != ''):
-            soup = BeautifulSoup(self.html,features="lxml")
-            print(str(soup.find_all('span',class_="geo")[0]))
-            # <span class="geo">39.90222; 116.42111</span>
+    def find_location(self):
+        if(self.have_looked == 0):
+            self.find_page()
+        if(self.soup != ''):
+            base_location = str(self.soup.find_all('span',class_="geo")[0]).split('>')[1].split('<')[0]
+            #39.90222; 116.42111
+            self.longitude = base_location.split("; ")[0]
+            self.latitude = base_location.split("; ")[1]
+            print(self.longitude+","+self.latitude)     
         else:
             print('pass')
+    
+    def find_province(self):
+        if(self.have_looked == 0):
+            self.find_page()
+        
         
 def main():
     wiki = wikipedia("上海虹桥")
-    wiki.reptile()
+    wiki.find_location()
     # urlopen('http://www.vjkbsdvjh.com/abs/fasfa.html')
 if __name__ == "__main__":
         main()
