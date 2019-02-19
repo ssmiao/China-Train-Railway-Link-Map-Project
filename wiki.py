@@ -28,20 +28,16 @@ class wikipedia(object):
         if(self.soup != ''):
             base_location = str(self.soup.find_all('span',class_="geo")[0]).split('>')[1].split('<')[0]
             #39.90222; 116.42111
-            self.longitude = base_location.split("; ")[0]
-            self.latitude = base_location.split("; ")[1]
-            print(self.longitude+","+self.latitude)     
-        else:
-            print('pass')
+            self.latitude = base_location.split("; ")[0]
+            self.longitude = base_location.split("; ")[1]
+        #     print(str(self.longitude)+","+str(self.latitude))     
+        # else:
+        #     print('pass')
     
-    def find_province(self):
-        if(self.have_looked == 0):
-            self.find_page()
-        
-        
 def main():
     wiki = wikipedia("上海虹桥")
     wiki.find_location()
+    # wiki.find_province()
     # urlopen('http://www.vjkbsdvjh.com/abs/fasfa.html')
 if __name__ == "__main__":
         main()
