@@ -5,18 +5,21 @@ from string import ascii_uppercase as alphabet
 from collections import OrderedDict
 from sql import sql
 
+from wiki import wikipedia
+from amap import amap_search
+
 class station(object):#todo:添加经纬坐标
-    def __init__(self,station_name,pym='',tmis='',dbm='',province=''):
+    def __init__(self,station_name,pym='',tmis='',dbm='',province='',longitude=0,latitude=0):
                 #是站点名称station_name，拼音码pym，中国车站代码tmis，电报码dbm
         self.station_name = station_name
         self.pym = pym
         self.tmis = tmis
         self.dbm = dbm
         self.province = province
-        # if(tmis == ''):
-        self.get_tmis()
+        self.longitude = longitude
+        self.latitude =latitude
         
-    #get_*是封装来自emu-tools的代码
+    #get_tmis是封装来自emu-tools的代码，从12306官方接口获取tmis信息
     def get_tmis(self):
         name = self.station_name 
         bureau=0
@@ -37,7 +40,16 @@ class station(object):#todo:添加经纬坐标
             if(self.station_name == k):
                 self.tmis = v
 
+    #从维基百科获取经纬度信息
+    def get_location(self):
+        wiki = wikipedia(station_name)
+        wiki.find_location()
+        self.longitude = wiki.longitude
+        self.latitude = latitude
+
     def get_province(self):
+        
+        #尝试从12306官方接口获取所在省份信息
         try:
             if(self.pym != ''):
                 pinyin = self.pym
@@ -53,10 +65,17 @@ class station(object):#todo:添加经纬坐标
                         # print(self.province)
         except:
             pass
-        if(self.province == ''):
-            pass    #从维基百科获取
-
     
+    #从高德地图结合经纬度获得所在省份
+        if(self.province == ''):
+            if(self.longitude = 0):
+                self.get_location()
+            if(self.longitude != 0):            
+                amap = amap_search(self.longitude,self.latitude)
+                amap.get_province()
+                self.province = amap.province
+
+    #添加站点到数据库
     def tosql(self):
         dbe = sql()
         dbe.connect()
