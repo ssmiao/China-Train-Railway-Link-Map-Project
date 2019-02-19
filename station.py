@@ -42,10 +42,10 @@ class station(object):#todo:添加经纬坐标
 
     #从维基百科获取经纬度信息
     def get_location(self):
-        wiki = wikipedia(station_name)
+        wiki = wikipedia(self.station_name)
         wiki.find_location()
         self.longitude = wiki.longitude
-        self.latitude = latitude
+        self.latitude = wiki.latitude
 
     def get_province(self):
         
@@ -66,9 +66,9 @@ class station(object):#todo:添加经纬坐标
         except:
             pass
     
-    #从高德地图结合经纬度获得所在省份
+        #从高德地图结合经纬度获得所在省份
         if(self.province == ''):
-            if(self.longitude = 0):
+            if(self.longitude == 0):
                 self.get_location()
             if(self.longitude != 0):            
                 amap = amap_search(self.longitude,self.latitude)
@@ -79,7 +79,7 @@ class station(object):#todo:添加经纬坐标
     def tosql(self):
         dbe = sql()
         dbe.connect()
-        dbe.addStation(self.station_name,self.pym,self.tmis,self.dbm,self.province)
+        dbe.addStation(self.station_name,self.pym,self.tmis,self.dbm,self.province,self.longitude,self.latitude)
         dbe.close()
 
 if __name__ == "__main__":

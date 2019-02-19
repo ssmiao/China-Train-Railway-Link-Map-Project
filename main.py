@@ -35,6 +35,7 @@ class reptile(object):
             station_i = station(station_name,station_pym)
             station_i.dbm = station_str.split("|")[2]
             station_i.get_tmis()
+            station_i.get_location()
             station_i.get_province()
             station_i.tosql()
             

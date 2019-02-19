@@ -39,7 +39,7 @@ class sql(object):
         pass#INSERT INTO 表名称 VALUES (值1, 值2,....)
     
     #加入火车站点信息到数据库
-    def addStation(self,station_name,pym,tmis,dbm,province):
+    def addStation(self,station_name,pym,tmis,dbm,province,longitude,latitude):
         
         #去重加入新站点信息
         self._cursor.execute('INSERT INTO Stations (Station) VALUES (\''+station_name +'\') ON DUPLICATE KEY UPDATE stationId = stationId;')
@@ -60,7 +60,13 @@ class sql(object):
             self._cursor.execute('UPDATE Stations SET DBM = \''+ dbm +'\' WHERE Station = \''+station_name+'\';')
             self._db.commit()
 
-        #更新Provinces信息
+        #更新Province信息
         if(province != ''):
             self._cursor.execute('UPDATE Stations SET Province = \''+ province +' \' WHERE Station = \''+station_name+'\';')
+            self._db.commit()
+        
+        #更新经纬度信息
+        if(longitude != 0):
+            self._cursor.execute('UPDATE Stations SET longitude = \''+ longitude +' \' WHERE Station = \''+station_name+'\';')
+            self._cursor.execute('UPDATE Stations SET latitude = \''+ latitude +' \' WHERE Station = \''+station_name+'\';')            
             self._db.commit()
