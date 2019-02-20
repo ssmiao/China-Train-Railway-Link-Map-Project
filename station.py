@@ -1,3 +1,5 @@
+# -*- coding:utf8 -*-
+
 #class station
 import requests
 import json
@@ -30,8 +32,7 @@ class station(object):#todo:添加经纬坐标
         while True:
             try:
                 response = requests.post(url, params, timeout=1).json()
-            # except (requests.exceptions.Timeout, json.JSONDecodeError):
-            except:
+            except (requests.exceptions.Timeout, json.JSONDecodeError):
                 pass
             else:
                 break

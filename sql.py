@@ -1,3 +1,4 @@
+# -*- coding:utf8 -*-
 
 import pymysql
 
@@ -10,6 +11,7 @@ port=3306
 ##########
 
 class sql(object):
+
     def __init__(self,host= '127.0.0.1',port=3306,user='CNTrain',password= 'password',dbname= 'CNTrain'):
         self.host = host
         self.port = port
@@ -70,3 +72,12 @@ class sql(object):
             self._cursor.execute('UPDATE Stations SET longitude = \''+ longitude +' \' WHERE Station = \''+station_name+'\';')
             self._cursor.execute('UPDATE Stations SET latitude = \''+ latitude +' \' WHERE Station = \''+station_name+'\';')            
             self._db.commit()
+
+def main():
+    db = sql()
+    db.connect()
+    print("success")
+    db.close()
+
+if __name__ == "__main__":
+        main()

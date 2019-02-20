@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# -*- coding:utf8 -*-
 
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
@@ -23,7 +23,7 @@ class reptile(object):
     
     def station_figure(self):
         html = urlopen(station_url).read().decode('utf-8')
-
+        print("1.pass")
         station_str_array = html[21:-2].split("@")
         # print(len(station_str_array))
         for i in range(len(station_str_array)):
@@ -35,8 +35,11 @@ class reptile(object):
             station_i = station(station_name,station_pym)
             station_i.dbm = station_str.split("|")[2]
             station_i.get_tmis()
+            print("2.pass")
             station_i.get_location()
+            print("3.pass")            
             station_i.get_province()
+            print("4.pass")            
             station_i.tosql()
             
             print(station_name+'   '+station_i.tmis+"   "+station_i.province+'  '+station_i.dbm+'  done.')

@@ -45,11 +45,16 @@ CREATE TABLE `Trains` (
 ### 网络说明
 你可能需要可以自由的访问维基百科才可以使用部分功能。
 
+在检测到访问困难时，我们会尝试已知的维基百科反向代理。
+
+你可以将自建的或已知的反向代理加入配置文件config.py中。
+
+参见：https://zh.wikipedia.org/zh/Wikipedia:%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%E6%8B%B7%E8%B4%9D%E7%BD%91%E7%AB%99
+
 ## 开源说明
 
-特别感谢Arnie97提供的使用MIT协议的开源项目emu-tools https://github.com/Arnie97/emu-tools 本项目部分使用了来自该项目提供的接口和代码。
+特别感谢Arnie97的使用MIT协议的开源项目emu-tools https://github.com/Arnie97/emu-tools 本项目部分使用了来自该项目提供的接口和代码。
 
-较与该项目，本项目暂未收录从维基百科导入站点信息的方法（todo,需要mwclient依赖）
 
 ### 考虑的方向
 -原则上讲，我们只收录目前尚在使用的站点信息。所有站名来自官方接口.但可能在2019.2.16之后废弃的站点不会得到删除。

@@ -1,3 +1,5 @@
+# -*- coding:utf8 -*-
+
 #SQLData
 host='127.0.0.1'
 user = 'CNTrain'
@@ -16,3 +18,7 @@ third_party_url = ['http://qq.ip138.com/train/','.htm']#这个站点用于提供
 station_url = 'https://kyfw.12306.cn/otn/resources/js/framework/station_name.js'#这个文件包含站名和拼音名，随实际状况更新，序号可能变化
 ##########
 
+#维基百科或其反向代理界面
+
+#wiki_url = 'https://zh.wikipedia.org'
+wiki_url = 'https://pc.bk.wjbk.site/'

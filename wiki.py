@@ -1,10 +1,14 @@
+# -*- coding:utf8 -*-
+
 import urllib
 from urllib.parse import quote
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
+import config
+
 class wikipedia(object):
-    def __init__(self,station_name,base_url = 'https://zh.wikipedia.org/wiki/',html='',have_looked = 0):
+    def __init__(self,station_name,base_url = 'https://www.wikizero.com/zh/wiki/',html='',have_looked = 0):
         self.station_name = station_name
         self.base_url = base_url
         self.have_looked = have_looked
@@ -26,6 +30,8 @@ class wikipedia(object):
         if(self.have_looked == 0):
             self.find_page()
         if(self.soup != ''):
+            #print(self.soup.find_all('span',class_="geo"))
+            print(self.soup)
             base_location = str(self.soup.find_all('span',class_="geo")[0]).split('>')[1].split('<')[0]
             #39.90222; 116.42111
             self.latitude = base_location.split("; ")[0]
@@ -35,10 +41,13 @@ class wikipedia(object):
         #     print('pass')
     
 def main():
+
+    # url = 'https://zh.wikipedia.org/wiki/'
+    # resp = urlopen(url)
+    # code = resp.getcode()
+    # print('the result is :', code)
     wiki = wikipedia("上海虹桥")
     wiki.find_location()
-    # wiki.find_province()
-    # urlopen('http://www.vjkbsdvjh.com/abs/fasfa.html')
 if __name__ == "__main__":
         main()
         

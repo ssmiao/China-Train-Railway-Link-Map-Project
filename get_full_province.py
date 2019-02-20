@@ -1,3 +1,5 @@
+# -*- coding:utf8 -*-
+
 from sql import sql
 from station import station
 
