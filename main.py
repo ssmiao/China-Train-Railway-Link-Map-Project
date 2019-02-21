@@ -41,7 +41,7 @@ class reptile(object):
             station_i.get_province()
             station_i.tosql()
             
-            print(station_name+'    '+station_i.tmis+"  "+station_i.province+'  '+station_i.dbm+"   "+station_i.longitude+" "+station_i.latitude+'  done.')
+            print(station_name+'    '+station_i.tmis+"  "+station_i.province+'  '+station_i.dbm+"   "+str(station_i.longitude)+" "+str(station_i.latitude)+'  done.')
 
 class train(object):
     def __init__(self,train_name,first_site,terminus,viasite):
