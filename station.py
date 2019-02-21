@@ -1,18 +1,23 @@
 # -*- coding:utf8 -*-
 
-#class station
 import requests
 import json
 from string import ascii_uppercase as alphabet
 from collections import OrderedDict
 from sql import sql
+from urllib.request import urlopen
 
 from wiki import wikipedia
 from amap import amap_search
 
-class station(object):#todo:添加经纬坐标
-    def __init__(self,station_name,pym='',tmis='',dbm='',province='',longitude=0,latitude=0):
-                #是站点名称station_name，拼音码pym，中国车站代码tmis，电报码dbm
+import config
+
+station_url = config.configs['station_url']
+#这个文件包含站名和拼音名，随实际状况更新，序号可能变化 
+
+class station(object):
+    def __init__(self,station_name ='',pym='',tmis='',dbm='',province='',longitude=0,latitude=0):
+                #是站点名称station_name，拼音码pym，中国车站代码tmis，电报码dbm,经度longitude，纬度latitude
         self.station_name = station_name
         self.pym = pym
         self.tmis = tmis
@@ -20,7 +25,31 @@ class station(object):#todo:添加经纬坐标
         self.province = province
         self.longitude = longitude
         self.latitude =latitude
-        
+    
+    #用于批量处理来自station_url的站点
+    def init_station_str(self):
+        html = urlopen(station_url).read().decode('utf-8')
+        station_str_array = html[21:-2].split("@")
+        for i in range(len(station_str_array)):
+            self.station_str = station_str_array[i]
+            # zzn|株洲南|KVQ|zhuzhounan|zzn|2850
+            
+            self.station_name = self.station_str.split("|")[1]
+
+            self.get_pym_dbm()
+            self.get_tmis()
+            self.get_location()
+            self.get_province()
+            self.tosql()
+            print(self.station_name+'    '+self.tmis+"  "+self.province+'  '+self.dbm+"   "+str(self.longitude)+" "+str(self.latitude)+'  done.')
+ 
+            
+    #解析pym和dbm
+    def get_pym_dbm(self):
+            self.pym = self.station_str.split("|")[-2] #站点拼音码
+            self.dbm = self.station_str.split("|")[2]
+
+ 
     #get_tmis是封装来自emu-tools的代码，从12306官方接口获取tmis信息
     def get_tmis(self):
         name = self.station_name 
@@ -85,6 +114,5 @@ class station(object):#todo:添加经纬坐标
         dbe.close()
 
 if __name__ == "__main__":
-    st = station('北京','bj')
-    st.get_more_infor()
-    print(type(st.dbm))
+    st = station()
+    st.init_station_str()

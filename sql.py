@@ -2,17 +2,13 @@
 
 import pymysql
 
-#SQLData
-host='127.0.0.1'
-user = 'CNTrain'
-password = 'password'
-db = 'CNTrain'
-port=3306
-##########
+import config
+
+db_config = config.configs['db']
 
 class sql(object):
 
-    def __init__(self,host= '127.0.0.1',port=3306,user='CNTrain',password= 'password',dbname= 'CNTrain'):
+    def __init__(self,host=db_config['host'],port=db_config['port'],user=db_config['user'],password=db_config['password'],dbname=db_config['db']):
         self.host = host
         self.port = port
         self.user = user

@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import config
 
 class wikipedia(object):
-    def __init__(self,station_name,base_url = 'https://zh.wikipedia.org/wiki/',html='',have_looked = 0):
+    def __init__(self,station_name,base_url = config.configs['wiki_url']+'/wiki/',html='',have_looked = 0):
         self.station_name = station_name
         self.base_url = base_url
         self.have_looked = have_looked
@@ -39,7 +39,6 @@ class wikipedia(object):
                 pass
     
 def main():
-
     wiki = wikipedia("上海虹桥")
     wiki.find_location()
 if __name__ == "__main__":
