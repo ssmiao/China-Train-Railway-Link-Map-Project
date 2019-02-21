@@ -70,7 +70,9 @@ class station(object):#todo:添加经纬坐标
         if(self.province == ''):
             if(self.longitude == 0):
                 self.get_location()
-            if(self.longitude != 0):            
+            if(self.longitude == 0):
+                pass
+            else:            
                 amap = amap_search(self.longitude,self.latitude)
                 amap.get_province()
                 self.province = amap.province
