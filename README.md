@@ -22,7 +22,14 @@ CREATE TABLE `Stations` (
   `PYM` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '拼音码',
   PRIMARY KEY (`StationId`),
   UNIQUE KEY `Stations_UN` (`Station`)
-) ENGINE=InnoDB AUTO_INCREMENT=156653 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=InnoDB AUTO_INCREMENT=156653 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `Trains` (
+  `Train_name` int(6) NOT NULL DEFAULT 0,
+  `Grade` varchar(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `RouteId` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`RouteId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `RouteStations` (
   `RouteId` int(11) NOT NULL DEFAULT 0,
@@ -32,24 +39,12 @@ CREATE TABLE `RouteStations` (
   KEY `RouteStations_Stations_FK` (`StationId`),
   CONSTRAINT `RouteStations_Stations_FK` FOREIGN KEY (`StationId`) REFERENCES `Stations` (`StationId`),
   CONSTRAINT `RouteStations_Trains_FK` FOREIGN KEY (`routeId`) REFERENCES `Trains` (`routeId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `Trains` (
-  `Train_name` int(6) NOT NULL DEFAULT 0,
-  `Grade` varchar(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `RouteId` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`RouteId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ```
 
 ### 网络说明
 你可能需要可以自由的访问维基百科才可以使用部分功能。
-
-在检测到访问困难时，我们会尝试已知的维基百科反向代理。
-
-你可以将自建的或已知的反向代理加入配置文件config.py中。
-
-参见：https://zh.wikipedia.org/zh/Wikipedia:%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%E6%8B%B7%E8%B4%9D%E7%BD%91%E7%AB%99
 
 ## 开源说明
 
