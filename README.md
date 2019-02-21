@@ -1,11 +1,9 @@
 # China-Train-Railway-Link-Map-Project
 中国铁路数据收集与可视化
 
-
 这里是一个中国铁路信息数据库。
 
 ## 数据来源
-
 我们的数据来源于12306官方网站接口，中文维基百科，高德地图，谷歌地图（计划中）
 
 ## 依赖：
@@ -16,6 +14,7 @@ IPython(可选) bs4
 使用了Mariadb，理论上这个量级的数据大多数数据库都可以处理。
 
 目前有三张表。
+
 ```
 CREATE TABLE `Stations` (
   `Station` char(10) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -51,7 +50,6 @@ CREATE TABLE `RouteStations` (
 你可能需要可以自由的访问中文维基百科,谷歌地图（将来版本）才可以使用部分功能。
 
 ## 开源说明
-
 特别感谢Arnie97的使用MIT协议的开源项目emu-tools https://github.com/Arnie97/emu-tools 本项目部分使用了来自该项目提供的接口和代码。
 
 
