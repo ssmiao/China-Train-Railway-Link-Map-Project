@@ -30,22 +30,14 @@ class wikipedia(object):
         if(self.have_looked == 0):
             self.find_page()
         if(self.soup != ''):
-            #print(self.soup.find_all('span',class_="geo"))
-            print(self.soup)
             base_location = str(self.soup.find_all('span',class_="geo")[0]).split('>')[1].split('<')[0]
             #39.90222; 116.42111
             self.latitude = base_location.split("; ")[0]
             self.longitude = base_location.split("; ")[1]
-        #     print(str(self.longitude)+","+str(self.latitude))     
-        # else:
-        #     print('pass')
+
     
 def main():
 
-    # url = 'https://zh.wikipedia.org/wiki/'
-    # resp = urlopen(url)
-    # code = resp.getcode()
-    # print('the result is :', code)
     wiki = wikipedia("上海虹桥")
     wiki.find_location()
 if __name__ == "__main__":

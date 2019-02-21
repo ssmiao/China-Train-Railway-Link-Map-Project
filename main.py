@@ -23,26 +23,25 @@ class reptile(object):
     
     def station_figure(self):
         html = urlopen(station_url).read().decode('utf-8')
-        print("1.pass")
         station_str_array = html[21:-2].split("@")
         # print(len(station_str_array))
         for i in range(len(station_str_array)):
             station_str = station_str_array[i]
             # zzn|株洲南|KVQ|zhuzhounan|zzn|2850
 
+            #解析pym和dbm
             station_name = station_str.split("|")[1]
             station_pym = station_str.split("|")[-2] #站点拼音码
             station_i = station(station_name,station_pym)
             station_i.dbm = station_str.split("|")[2]
+            
+            #传入station
             station_i.get_tmis()
-            print("2.pass")
             station_i.get_location()
-            print("3.pass")            
             station_i.get_province()
-            print("4.pass")            
             station_i.tosql()
             
-            print(station_name+'   '+station_i.tmis+"   "+station_i.province+'  '+station_i.dbm+'  done.')
+            print(station_name+'   '+station_i.tmis+"   "+station_i.province+'  '+station_i.dbm+station_i.longitude+"   "+station_i.latitude+'  done.')
 
 class train(object):
     def __init__(self,train_name,first_site,terminus,viasite):

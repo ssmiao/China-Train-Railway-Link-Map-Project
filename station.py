@@ -62,8 +62,7 @@ class station(object):#todo:添加经纬坐标
                 for result in results:
                     if(self.station_name == result['ZMHZ']):
                         self.province = result['SSJC']
-                        # self.dbm = result['DBM']
-                        # print(self.province)
+
         except:
             pass
     
