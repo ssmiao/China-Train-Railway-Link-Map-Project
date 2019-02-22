@@ -16,7 +16,7 @@
 from tqdm import tqdm
 import time
 
-with tqdm(total=1000000,ncols=110) as pbar:
+with tqdm(total=1000000,ncols=100) as pbar:
     for i in range(1000000):
         time.sleep(0.001)
         mat = "{:10}"

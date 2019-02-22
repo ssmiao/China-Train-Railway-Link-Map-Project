@@ -35,7 +35,7 @@ class station(object):
         station_str_array = html[21:-2].split("@")
         
 
-        with tqdm.tqdm(total=len(station_str_array),ncols=100) as pbar:
+        with tqdm.tqdm(total=len(station_str_array),ncols=80) as pbar:
 
             for i in range(len(station_str_array)):  
                 self.pym = ''
@@ -50,7 +50,7 @@ class station(object):
                 
                 self.station_name = self.station_str.split("|")[1]
                 
-                mat = "{:4}"
+                mat = "{:10}"
                 pbar.set_description("站点分析中:"+mat.format(self.station_name))
                 pbar.update(1)
                 
