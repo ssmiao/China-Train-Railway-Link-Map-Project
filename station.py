@@ -50,7 +50,7 @@ class station(object):
                 
                 self.station_name = self.station_str.split("|")[1]
                 
-                mat = "{:8}"
+                mat = "{:4}"
                 pbar.set_description("站点分析中:"+mat.format(self.station_name))
                 pbar.update(1)
                 
