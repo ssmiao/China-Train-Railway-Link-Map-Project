@@ -118,7 +118,7 @@ class station(object):
             else:            
                 amap_i = amap.amap_search(self.longitude,self.latitude)
                 amap_i.get_province()
-                self.province = amap.province
+                self.province = amap_i.province
 
     #添加站点到数据库
     def tosql(self):
