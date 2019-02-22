@@ -2,6 +2,7 @@
 
 import requests
 import json
+import re
 from string import ascii_uppercase as alphabet
 from collections import OrderedDict
 from sql import sql
