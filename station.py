@@ -44,6 +44,10 @@ class station(object):
             # zzn|株洲南|KVQ|zhuzhounan|zzn|2850
             
             self.station_name = self.station_str.split("|")[1]
+            
+            #排除某些含有空格的站点（水用站点？）
+            if(re.findall(r' ',self.station_name)):
+                continue
 
             self.get_pym_dbm()
             self.get_tmis()

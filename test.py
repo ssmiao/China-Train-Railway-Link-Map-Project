@@ -1,2 +1,4 @@
-               "lat" : 51.6872,
-               "lng" : 121.8799799,51.6872
+import re
+
+if(re.findall(r' ','海 口站')):
+    print('pass')
