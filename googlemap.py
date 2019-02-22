@@ -18,6 +18,13 @@ class google_search(object):
             self.latitude  = float(re.findall(r'"lat" : .*?,',html)[0][8:-1])
             self.longitude = float(re.findall(r'"lng" : .*',html)[0][8:-1])
 
+            #转化为高德坐标
+            amap_trans = amap.amap_trans(self.longitude,self.latitude)
+            amap_trans.trans()
+            self.longitude = amap_trans.longitude
+            self.latitude = amap_trans.latitude
+
+
 if __name__ == "__main__":
     google = google_search('宋站')
     google.find_geometry()

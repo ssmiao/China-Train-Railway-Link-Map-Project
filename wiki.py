@@ -6,6 +6,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 import config
+import amap
 
 class wikipedia(object):
     def __init__(self,station_name,base_url = config.configs['wiki_url']+'/wiki/',html='',have_looked = 0):
@@ -35,6 +36,13 @@ class wikipedia(object):
                 #39.90222; 116.42111
                 self.latitude = float(base_location.split("; ")[0])
                 self.longitude = float(base_location.split("; ")[1])
+
+                #转化为高德坐标
+                amap_trans = amap.amap_trans(self.longitude,self.latitude)
+                amap_trans.trans()
+                self.longitude = amap_trans.longitude
+                self.latitude = amap_trans.latitude
+
             except IndexError :
                 pass
     

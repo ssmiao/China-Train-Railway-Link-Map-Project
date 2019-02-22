@@ -82,13 +82,6 @@ class station(object):
             google.find_geometry()
             self.longitude = google.longitude
             self.latitude = google.latitude
-        
-        #转换成高德坐标
-        if(self.longitude != 0)
-            amap_trans = amap.amap_trans(self.longitude,self.latitude)
-            amap_trans.trans()
-            self.longitude = amap_trans.longitude
-            self.latitude = amap_trans.latitude
 
     #从12306接口和高德地图获取省份信息
     def get_province(self):  
