@@ -116,8 +116,8 @@ class station(object):
             if(self.longitude == 0):
                 pass
             else:            
-                amap = amap.amap_search(self.longitude,self.latitude)
-                amap.get_province()
+                amap_i = amap.amap_search(self.longitude,self.latitude)
+                amap_i.get_province()
                 self.province = amap.province
 
     #添加站点到数据库
