@@ -51,7 +51,7 @@ class station(object):
                 self.station_name = self.station_str.split("|")[1]
                 
                 mat = "{:8}"
-                pbar.set_description("站点分析中:"mat.format(self.station_name))
+                pbar.set_description("站点分析中:"+mat.format(self.station_name))
                 pbar.update(1)
                 
                 #排除某些含有空格的站点（水用站点？）
