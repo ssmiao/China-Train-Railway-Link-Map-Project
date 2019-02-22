@@ -3,6 +3,7 @@ from urllib.request import urlopen
 import re
 
 import config
+import amap
 
 google_map_key = config.configs['google_key']
 

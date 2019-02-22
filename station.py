@@ -32,6 +32,14 @@ class station(object):
         html = urlopen(station_url).read().decode('utf-8')
         station_str_array = html[21:-2].split("@")
         for i in range(len(station_str_array)):
+            
+            self.pym = ''
+            self.tmis = ''
+            self.dbm = ''
+            self.province = ''
+            self.longitude = 0
+            self.latitude = 0
+            
             self.station_str = station_str_array[i]
             # zzn|株洲南|KVQ|zhuzhounan|zzn|2850
             

@@ -34,11 +34,11 @@ class amap_trans(object):
         self.latitude = re.findall(r',.*</locations>',html)[0][1:-12]
 
 def main():
-    # amap = amap_search(116.42111,39.90222)
-    # amap.get_province()
-    # print(amap.province)
-    amap = amap_trans(116.42111,39.90222)
-    amap.trans()
+    amap = amap_search(114.170074327257,22.301303439671)
+    amap.get_province()
+    print(amap.province)
+    # amap = amap_trans(116.42111,39.90222)
+    # amap.trans()
 
 if __name__ == "__main__":
         main()
