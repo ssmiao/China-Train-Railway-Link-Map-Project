@@ -50,7 +50,7 @@ class station(object):
                 
                 self.station_name = self.station_str.split("|")[1]
                 
-                pbar.set_description(self.station_name+"处理中"）
+                pbar.set_description(self.station_name+'处理中'）
                 
                 #排除某些含有空格的站点（水用站点？）
                 if(re.findall(r' ',self.station_name)):
