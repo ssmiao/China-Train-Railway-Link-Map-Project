@@ -1,6 +1,6 @@
 from urllib.parse import quote
 from urllib.request import urlopen
-import re
+import requests
 
 import config
 import amap
@@ -16,17 +16,17 @@ class google_search(object):
     def find_geometry(self):
         fields = 'geometry'#,formatted_address,name'
         google_find_location_url = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input='+quote(self.location_name)+'&inputtype=textquery&fields='+fields+'&key='+google_map_key
-        html = urlopen(google_find_location_url).read().decode('utf-8')
-        if(re.findall(r'"status" : "OK"',html)):
-            self.latitude  = float(re.findall(r'"lat" : .*?,',html)[0][8:-1])
-            self.longitude = float(re.findall(r'"lng" : .*',html)[0][8:-1])
+        
+        r = requests.get(google_find_location_url)
+        if(r.json()['status']=='OK'):
+            self.latitude  = float(r.json()['candidates'][0]['geometry']['location']['lat'])
+            self.longitude = float(r.json()['candidates'][0]['geometry']['location']['lng'])
 
             #转化为高德坐标
             amap_trans = amap.amap_trans(self.longitude,self.latitude)
             amap_trans.trans()
             self.longitude = amap_trans.longitude
             self.latitude = amap_trans.latitude
-
 
 if __name__ == "__main__":
     google = google_search('宋站')

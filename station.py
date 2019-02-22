@@ -1,7 +1,6 @@
 # -*- coding:utf8 -*-
 
 import requests
-import json
 import re
 import tqdm
 from string import ascii_uppercase as alphabet
@@ -33,7 +32,6 @@ class station(object):
     def init_station_str(self):
         html = urlopen(station_url).read().decode('utf-8')
         station_str_array = html[21:-2].split("@")
-        
 
         with tqdm.tqdm(total=len(station_str_array),ncols=80) as pbar:
 
@@ -63,6 +61,7 @@ class station(object):
                 self.get_location()
                 self.get_province()
                 self.tosql()
+                #todo:协程优化
                 # print(self.station_name+'    '+self.tmis+"  "+self.province+'  '+self.dbm+"   "+str(self.longitude)+" "+str(self.latitude)+'  done.')
             
     #解析pym和dbm
@@ -75,8 +74,7 @@ class station(object):
         name = self.station_name 
         bureau=0
         url = 'http://hyfw.12306.cn/hyinfo/action/FwcszsAction_getljcz'
-        params = 'limit timestamp sheng shi'
-        params = {k: '' for k in params.split()}
+        params = {'limit': '', 'timestamp': '', 'sheng': '', 'shi': ''}
         params.update(q=name, ljdm=format(bureau, '02'))
         while True:
             try:
@@ -109,16 +107,14 @@ class station(object):
         #尝试从12306官方接口获取所在省份信息
         try:
             if(self.pym != ''):
-                pinyin = self.pym
                 url = 'https://www.12306.cn/yjcx/doPickJZM'
-                params = dict(param=pinyin, type=1, czlx=0)
-                response = requests.post(url, params)
-                results = json.loads(response.text)
+                params = dict(param=self.pym, type=1, czlx=0)
+                r = requests.post(url, params)
+                results = r.json()
 
                 for result in results:
                     if(self.station_name == result['ZMHZ']):
                         self.province = result['SSJC']
-
         except:
             pass
     
