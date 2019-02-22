@@ -35,7 +35,7 @@ class station(object):
         station_str_array = html[21:-2].split("@")
         
 
-        with tqdm.tqdm(total=len(station_str_array)) as pbar:
+        with tqdm.tqdm(total=len(station_str_array),ncols=100) as pbar:
 
             for i in range(len(station_str_array)):  
                 self.pym = ''
