@@ -3,6 +3,7 @@
 import requests
 import json
 import re
+import tqdm
 from string import ascii_uppercase as alphabet
 from collections import OrderedDict
 from sql import sql
@@ -32,31 +33,36 @@ class station(object):
     def init_station_str(self):
         html = urlopen(station_url).read().decode('utf-8')
         station_str_array = html[21:-2].split("@")
-        for i in range(len(station_str_array)):
-            
-            self.pym = ''
-            self.tmis = ''
-            self.dbm = ''
-            self.province = ''
-            self.longitude = 0
-            self.latitude = 0
-            
-            self.station_str = station_str_array[i]
-            # zzn|株洲南|KVQ|zhuzhounan|zzn|2850
-            
-            self.station_name = self.station_str.split("|")[1]
-            
-            #排除某些含有空格的站点（水用站点？）
-            if(re.findall(r' ',self.station_name)):
-                continue
-
-            self.get_pym_dbm()
-            self.get_tmis()
-            self.get_location()
-            self.get_province()
-            self.tosql()
-            print(self.station_name+'    '+self.tmis+"  "+self.province+'  '+self.dbm+"   "+str(self.longitude)+" "+str(self.latitude)+'  done.')
         
+
+        with tqdm(total=len(station_str_array)) as pbar:
+
+            for i in range(len(station_str_array)):  
+                self.pym = ''
+                self.tmis = ''
+                self.dbm = ''
+                self.province = ''
+                self.longitude = 0
+                self.latitude = 0
+                
+                self.station_str = station_str_array[i]
+                # zzn|株洲南|KVQ|zhuzhounan|zzn|2850
+                
+                self.station_name = self.station_str.split("|")[1]
+                
+                pbar.set_description(self.station_name+"处理中"）
+                
+                #排除某些含有空格的站点（水用站点？）
+                if(re.findall(r' ',self.station_name)):
+                    continue
+
+                self.get_pym_dbm()
+                self.get_tmis()
+                self.get_location()
+                self.get_province()
+                self.tosql()
+                # print(self.station_name+'    '+self.tmis+"  "+self.province+'  '+self.dbm+"   "+str(self.longitude)+" "+str(self.latitude)+'  done.')
+            
     #解析pym和dbm
     def get_pym_dbm(self):
             self.pym = self.station_str.split("|")[-2] #站点拼音码
