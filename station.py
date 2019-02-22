@@ -8,7 +8,8 @@ from sql import sql
 from urllib.request import urlopen
 
 from wiki import wikipedia
-from amap import amap_search
+import amap
+import googlemap
 
 import config
 
@@ -42,15 +43,13 @@ class station(object):
             self.get_province()
             self.tosql()
             print(self.station_name+'    '+self.tmis+"  "+self.province+'  '+self.dbm+"   "+str(self.longitude)+" "+str(self.latitude)+'  done.')
- 
-            
+        
     #解析pym和dbm
     def get_pym_dbm(self):
             self.pym = self.station_str.split("|")[-2] #站点拼音码
             self.dbm = self.station_str.split("|")[2]
 
- 
-    #get_tmis是封装来自emu-tools的代码，从12306官方接口获取tmis信息
+    #从12306官方接口获取tmis信息
     def get_tmis(self):
         name = self.station_name 
         bureau=0
@@ -65,20 +64,34 @@ class station(object):
                 pass
             else:
                 break
-        # return OrderedDict((d['HZZM'], d['TMISM']) for d in response)
         for k, v in (OrderedDict((d['HZZM'], d['TMISM']) for d in response)).items():
             if(self.station_name == k):
                 self.tmis = v
 
-    #从维基百科获取经纬度信息
+    #从维基百科和谷歌地图获取经纬度信息
     def get_location(self):
+        #调用维基百科
         wiki = wikipedia(self.station_name)
         wiki.find_location()
         self.longitude = wiki.longitude
         self.latitude = wiki.latitude
-
-    def get_province(self):
         
+        #调用谷歌api
+        if(self.longitude == 0):
+            google = googlemap.google_search(self.station_name+'火车站')
+            google.find_geometry()
+            self.longitude = google.longitude
+            self.latitude = google.latitude
+        
+        #转换成高德坐标
+        if(self.longitude != 0)
+            amap_trans = amap.amap_trans(self.longitude,self.latitude)
+            amap_trans.trans()
+            self.longitude = amap_trans.longitude
+            self.latitude = amap_trans.latitude
+
+    #从12306接口和高德地图获取省份信息
+    def get_province(self):  
         #尝试从12306官方接口获取所在省份信息
         try:
             if(self.pym != ''):
@@ -102,7 +115,7 @@ class station(object):
             if(self.longitude == 0):
                 pass
             else:            
-                amap = amap_search(self.longitude,self.latitude)
+                amap = amap.amap_search(self.longitude,self.latitude)
                 amap.get_province()
                 self.province = amap.province
 

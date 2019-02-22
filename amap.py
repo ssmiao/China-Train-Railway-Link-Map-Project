@@ -21,9 +21,24 @@ class amap_search(object):
             full_province = re.search(r'\"province\":.*?\",',html).group()[12:-2]
             self.province = full_abbr_province_dict[full_province]
 
+class amap_trans(object):
+    def __init__(self,longitude,latitude,coordsys='gps'):
+        self.longitude = longitude
+        self.latitude = latitude
+        self.coordsys = coordsys
+
+    def trans(self):
+        trans_url = 'https://restapi.amap.com/v3/assistant/coordinate/convert?locations='+str(self.longitude)+','+str(self.latitude)+'&coordsys=gps&output=xml&key='+amap_web_key
+        html = urlopen(trans_url).read().decode('utf-8')
+        self.longitude = re.findall(r'<locations>.*,',html)[0][11:-1]
+        self.latitude = re.findall(r',.*</locations>',html)[0][1:-12]
+
 def main():
-    amap = amap_search(116.42111,39.90222)
-    amap.get_province()
-    print(amap.province)
+    # amap = amap_search(116.42111,39.90222)
+    # amap.get_province()
+    # print(amap.province)
+    amap = amap_trans(116.42111,39.90222)
+    amap.trans()
+
 if __name__ == "__main__":
         main()
