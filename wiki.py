@@ -33,8 +33,8 @@ class wikipedia(object):
             try:
                 base_location = str(self.soup.find_all('span',class_="geo")[0]).split('>')[1].split('<')[0]
                 #39.90222; 116.42111
-                self.latitude = base_location.split("; ")[0]
-                self.longitude = base_location.split("; ")[1]
+                self.latitude = float(base_location.split("; ")[0])
+                self.longitude = float(base_location.split("; ")[1])
             except IndexError :
                 pass
     
