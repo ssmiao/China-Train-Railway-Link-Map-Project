@@ -116,7 +116,7 @@ class station(object):
                 for result in results:
                     if(self.station_name == result['ZMHZ']):
                         self.province = result['SSJC']
-        except:
+        except Exception:
             pass
     
         #从高德地图结合经纬度获得所在省份

@@ -1,54 +1,34 @@
 import asyncio
-import urllib.parse
-import sys
+import time
 
-# async def print_http_headers(url):
-#     url = urllib.parse.urlsplit(url)
-#     if url.scheme == 'https':
-#         reader, writer = await asyncio.open_connection(
-#             url.hostname, 443, ssl=True)
-#     else:
-#         reader, writer = await asyncio.open_connection(
-#             url.hostname, 80)
+async def say_after0(delay, what):
+    time.sleep(1)
+    print(time.strftime('%X'))
+    await asyncio.sleep(delay)
+    print(what)
+    print(time.strftime('%X'))
 
-#     query = (
-#         f"HEAD {url.path or '/'} HTTP/1.0\r\n"
-#         f"Host: {url.hostname}\r\n"
-#         f"\r\n"
-#     )
+async def say_after1(delay, what):
+    # time.sleep(1)
+    print(time.strftime('%X'))
+    await asyncio.sleep(delay)
+    print(what)
+    print(time.strftime('%X'))
 
-#     writer.write(query.encode('latin-1'))
-#     while True:
-#         line = await reader.readline()
-#         if not line:
-#             break
+async def main():
+    task1 = asyncio.create_task(
+        say_after0(1, 'hello'))
 
-#         line = line.decode('latin1').rstrip()
-#         if line:
-#             print(f'HTTP header> {line}')
+    task2 = asyncio.create_task(
+        say_after1(2, 'world'))
 
-#     # Ignore the body, close the socket
-#     writer.close()
+    print(f"started at {time.strftime('%X')}")
 
-# url = sys.argv[1]
-# asyncio.run(print_http_headers(url))
+    # Wait until both tasks are completed (should take
+    # around 2 seconds.)
+    await task1
+    await task2
 
-async def wget(host):
-    print('wget %s...' % host)
-    connect = asyncio.open_connection(host, 80)
-    reader, writer = await connect
-    header = 'GET / HTTP/1.0\r\nHost: %s\r\n\r\n' % host
-    writer.write(header.encode('utf-8'))
-    await writer.drain()
-    while True:
-        line = await reader.readline()
-        if line == b'\r\n':
-            break
-        print('%s header > %s' % (host, line.decode('utf-8').rstrip()))
-    # Ignore the body, close the socket
-    writer.close()
+    print(f"finished at {time.strftime('%X')}")
 
-loop = asyncio.get_event_loop()
-tasks = [wget(host) for host in ['www.sina.com.cn', 'www.sohu.com', 'www.163.com']]
-loop.run_until_complete(asyncio.wait(tasks))
-loop.close()
+asyncio.run(main())

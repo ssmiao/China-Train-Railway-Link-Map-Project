@@ -7,11 +7,10 @@ import re,random,os
 
 from station import station
 
-class reptile(object):
-    def __init__(self,base_url,ad_url):
-        self.base_url = base_url
-        self.ad_url = ad_url
-
+# class reptile(object):
+#     def __init__(self,base_url,ad_url):
+#         self.base_url = base_url
+#         self.ad_url = ad_url
 
 class train(object):
     def __init__(self,train_name,first_site,terminus,viasite):
