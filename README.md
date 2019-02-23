@@ -8,7 +8,7 @@
 
 ## 依赖：
 ### Python 依赖
-IPython(可选) bs4 
+tqdm bs4 requests 
 
 ### 数据库依赖
 使用了Mariadb，理论上这个量级的数据大多数数据库都可以处理。
