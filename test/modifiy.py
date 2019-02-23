@@ -5,8 +5,6 @@ def get_tmis(station_name):
     name = station_name 
     bureau=0
     url = 'http://hyfw.12306.cn/hyinfo/action/FwcszsAction_getljcz'
-    # params = 'limit timestamp sheng shi'
-    # params = {k:'' for k in params.split()}
     params = {'limit': '', 'timestamp': '', 'sheng': '', 'shi': ''}
     print(params)
     params.update(q=name, ljdm=format(bureau, '02'))
