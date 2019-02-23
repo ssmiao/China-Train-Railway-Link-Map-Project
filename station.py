@@ -80,7 +80,7 @@ class station(object):
         while True:
             try:
                 response = requests.post(url, params, timeout=1).json()
-            except :(requests.exceptions.Timeout,json.JSONDecodeError):
+            except (requests.exceptions.Timeout,json.JSONDecodeError):
                 pass
             else:
                 break
