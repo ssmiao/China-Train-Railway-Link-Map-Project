@@ -117,4 +117,4 @@ if __name__ == "__main__":
     asyncio.run(async_station_init.get_basic_info())
     asyncio.run(async_station_init.get_tmis())
     asyncio.run(async_station_init.get_google_location())
-    # asyncio.run()
+

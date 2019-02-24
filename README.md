@@ -10,6 +10,8 @@
 ### Python 依赖
 tqdm ~~bs4~~ requests pymysql lxml aiohttp
 
+以及一个3.7.0+的Python
+
 ### 数据库依赖
 使用了Mariadb，理论上这个量级的数据大多数数据库都可以处理。
 

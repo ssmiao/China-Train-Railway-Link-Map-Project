@@ -9,6 +9,10 @@ from collections import OrderedDict
 from sql import sql
 from urllib.request import urlopen
 
+import aiohttp
+import asyncio
+import tqdm
+
 from wiki import wikipedia
 import amap
 import googlemap
@@ -29,42 +33,38 @@ class station(object):
         self.longitude = longitude
         self.latitude =latitude
     
-    #用于批量处理来自station_url的站点
+    #用于批量处理来自station_url的站点(同步)
     def init_station_str(self):
         html = urlopen(station_url).read().decode('utf-8')
         station_str_array = html[21:-2].split("@")
 
-        with tqdm.tqdm(total=len(station_str_array),ncols=80) as pbar:
-
-            for i in range(len(station_str_array)):  
-                self.pym = ''
-                self.tmis = ''
-                self.dbm = ''
-                self.province = ''
-                self.longitude = 0
-                self.latitude = 0
-                
-                self.station_str = station_str_array[i]
-                # zzn|株洲南|KVQ|zhuzhounan|zzn|2850
-                
-                self.station_name = self.station_str.split("|")[1]
-                
-                mat = "{:10}"
-                pbar.set_description("站点分析中:"+mat.format(self.station_name))
-                pbar.update(1)
-                
-                #排除某些含有空格的站点（水用站点？）
-                if(re.findall(r' ',self.station_name)):
-                    continue
-
-                self.get_pym_dbm()
-                self.get_tmis()
-                self.get_location()
-                self.get_province()
-                self.tosql()
-                #todo:协程优化
-                # print(self.station_name+'    '+self.tmis+"  "+self.province+'  '+self.dbm+"   "+str(self.longitude)+" "+str(self.latitude)+'  done.')
+        for i in range(len(station_str_array)):  
+            self.pym = ''
+            self.tmis = ''
+            self.dbm = ''
+            self.province = ''
+            self.longitude = 0
+            self.latitude = 0
             
+            self.station_str = station_str_array[i]
+            # zzn|株洲南|KVQ|zhuzhounan|zzn|2850
+            
+            self.station_name = self.station_str.split("|")[1]
+            
+            mat = "{:10}"
+            
+            #排除某些含有空格的站点（水用站点？）
+            if(re.findall(r' ',self.station_name)):
+                continue
+
+            self.get_pym_dbm()
+            self.get_tmis()
+            self.get_location()
+            self.get_province()
+            self.tosql()
+            #todo:协程优化
+            # print(self.station_name+'    '+self.tmis+"  "+self.province+'  '+self.dbm+"   "+str(self.longitude)+" "+str(self.latitude)+'  done.')
+        
     #解析pym和dbm
     def get_pym_dbm(self):
             self.pym = self.station_str.split("|")[-2] #站点拼音码
@@ -129,6 +129,53 @@ class station(object):
                 amap_i = amap.amap_search(self.longitude,self.latitude)
                 amap_i.get_province()
                 self.province = amap_i.province
+
+    async def async_get_basic_info(self,session,pbar_basic_info):
+        pbar_basic_info.set_description("basic_info进度")
+        province_url = 'https://www.12306.cn/yjcx/doPickJZM'
+        province_params = dict(param=self.pym, type=1, czlx=0)
+        async with session.post(province_url,data = province_params) as resp:
+            assert resp.status == 200
+            data = json.loads(await resp.text())
+            # print(data)
+            for result in data :
+                if(self.station_name == result['ZMHZ']):
+                    self.province = result['SSJC']
+                    # print(self.station_name+':'+self.province)
+            pbar_basic_info.update(1)
+
+    async def async_get_tmis(self,session,pbar_tmis):
+        tmis_params = {'limit': '', 'timestamp': '', 'sheng': '', 'shi': ''}
+        pbar_tmis.set_description("tmis进度")
+        bureau=0
+        tmis_url = 'http://hyfw.12306.cn/hyinfo/action/FwcszsAction_getljcz'
+        tmis_params.update(q=self.station_name, ljdm=format(bureau, '02'))
+        
+        async with session.post(tmis_url,data = tmis_params) as resp:
+            for result in json.loads(await resp.text()):
+                if(self.station_name == result['HZZM']):
+                    self.tmis = result['TMISM']
+                pbar_tmis.update(1)
+    
+
+    async def async_get_location(self,session,pbar_location):
+        pbar_location.set_description("维基地点分析进度")        
+        #调用维基百科
+        wiki = wikipedia(self.station_name)
+        await asyncio.create_task(wiki.async_find_location(session))
+        self.longitude = wiki.longitude
+        self.latitude = wiki.latitude
+        pbar_location.update(1)
+    
+    async def async_get_google_location(self,session,pabr_google_location):
+        pabr_google_location.set_description("谷歌地点分析进度")
+        #调用谷歌地图
+        if(self.longitude == 0):
+            google = googlemap.google_search(self.station_name)
+            await google.async_find_geometry(session)
+            self.longitude = google.longitude
+            self.latitude = google.latitude
+        pabr_google_location.update(1)
 
     #添加站点到数据库
     def tosql(self):
