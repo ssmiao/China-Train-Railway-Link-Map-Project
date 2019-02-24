@@ -90,31 +90,31 @@ class async_station_init(object):
 
     async def get_tmis(self):
         async with aiohttp.ClientSession() as session_tmis:
-            with tqdm.tqdm(total=len(self.station_dict),ncols=80) as pbar_tmis:  
+            with tqdm.tqdm(total=len(self.station_dict),ncols=80,smoothing=0) as pbar_tmis:  
                 for station_i in self.station_dict:
                     await asyncio.create_task(self.station_dict[station_i].async_get_tmis(session_tmis,pbar_tmis))
 
     async def get_basic_info(self):
         async with aiohttp.ClientSession() as session_basic_info:
-            with tqdm.tqdm(total=len(self.station_dict),ncols=80) as pbar_basic_info:  
+            with tqdm.tqdm(total=len(self.station_dict),ncols=80,smoothing=0) as pbar_basic_info:  
                 for station_i in self.station_dict:
                     await asyncio.create_task(self.station_dict[station_i].async_get_basic_info(session_basic_info,pbar_basic_info))
 
     async def get_location(self):
         async with aiohttp.ClientSession() as session_wiki_location:
-            with tqdm.tqdm(total=len(self.station_dict),ncols=80) as pbar_wiki_location:  
+            with tqdm.tqdm(total=len(self.station_dict),ncols=80,smoothing=0) as pbar_wiki_location:  
                 for station_i in self.station_dict:
                     await asyncio.create_task(self.station_dict[station_i].async_get_location(session_wiki_location,pbar_wiki_location))
 
     async def get_google_location(self):
         async with aiohttp.ClientSession() as session_google_location:
-            with tqdm.tqdm(total=len(self.station_dict),ncols=80) as pbar_google_location:  
+            with tqdm.tqdm(total=len(self.station_dict),ncols=80,smoothing=0) as pbar_google_location:  
                 for station_i in self.station_dict:
                     await asyncio.create_task(self.station_dict[station_i].async_get_google_location(session_google_location,pbar_google_location))
 
 if __name__ == "__main__":
     async_station_init = async_station_init()
-    # asyncio.run(async_station_init.get_basic_info())
-    # asyncio.run(async_station_init.get_tmis())
+    asyncio.run(async_station_init.get_basic_info())
+    asyncio.run(async_station_init.get_tmis())
     asyncio.run(async_station_init.get_google_location())
     # asyncio.run()
