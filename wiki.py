@@ -45,7 +45,7 @@ class wikipedia(object):
                 self.longitude = amap_trans.longitude
                 self.latitude = amap_trans.latitude
 
-            except IndexError AttributeError:
+            except (IndexError,AttributeError):
                 pass
         else:
             print('empty wiki!')
