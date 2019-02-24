@@ -50,6 +50,7 @@ class station(object):
     
     ###todo:
     async def async_get_location(self,session,pbar_location):
+        pbar_location.set_description("维基地点分析进度")        
         #调用维基百科
         wiki = wikipedia(self.station_name)
         await asyncio.create_task(wiki.async_find_location(session))

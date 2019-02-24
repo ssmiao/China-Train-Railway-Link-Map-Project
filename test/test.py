@@ -1,13 +1,12 @@
-from enum import Enum, unique
+import requests
+import re
+import json
+import time
 
-@unique
-class Weekday(Enum):
-    Sun = 0 # Sun的value被设定为0
-    Mon = 1
-    Tue = 2
-    Wed = 3
-    Thu = 4
-    Fri = 5
-    Sat = 6
+start = time.time()
+wiki_url = 'https://zh.wikipedia.org/wiki/%E5%8C%97%E4%BA%AC%E7%AB%99'
 
-print(Weekday.Sun)
+html = requests.get(wiki_url)
+find = re.search(r'{"lat":.*?,"lon":.*?}',html.text)
+print(json.loads(find.group())['lat'])
+print(time.time()-start)

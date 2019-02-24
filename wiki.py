@@ -3,8 +3,8 @@
 import urllib
 from urllib.parse import quote
 from urllib.request import urlopen
-from bs4 import BeautifulSoup
-
+# from bs4 import BeautifulSoup
+import time
 
 import config
 import amap
@@ -26,17 +26,14 @@ class wikipedia(object):
             except urllib.error.URLError:
                 self.html = ''
         self.have_looked = 1
-        self.soup = BeautifulSoup(self.html,features="lxml")
 
     def find_location(self):
         if(self.have_looked == 0):
             self.find_page()
-        if(self.soup != ''):
+        if(self.html != ''):
             try:
-                base_location = str(self.soup.find_all('span',class_="geo")[0]).split('>')[1].split('<')[0]
-                #39.90222; 116.42111
-                self.latitude = float(base_location.split("; ")[0])
-                self.longitude = float(base_location.split("; ")[1])
+                find = re.search(r'{"lat":.*?,"lon":.*?}',self.html.text)
+                print(json.loads(find.group())['lat'])
 
                 #转化为高德坐标
                 amap_trans = amap.amap_trans(self.longitude,self.latitude)
@@ -46,24 +43,25 @@ class wikipedia(object):
 
             except IndexError :
                 pass
+        
     
     async def async_find_location(self,session):
         import aiohttp
         import asyncio
         
         wiki_url = self.base_url+quote(self.station_name+'站')
-        async with session.post(wiki_url) as resp:
+        async with session.head(wiki_url) as resp:
             if(resp.status == 404):
                 wiki_url = self.base_url+quote(self.station_name+'乘降所')
-                async with session.post(wiki_url) as resp:
-                    assert resp.status == 200
-                    self.soup = BeautifulSoup(await resp.text(),features="lxml")
+                async with session.head(wiki_url) as resp:
+                    # print(resp.status)# == 200
+                    self.html = await resp.text()
             else:
-                assert resp.status == 200
-                self.soup = BeautifulSoup(await resp.text(),features="lxml")
+                # print(resp.status)# == 200
+                self.html = await resp.text()
         self.have_looked = 1
         self.find_location()
-
+        
     
 def main():
     wiki = wikipedia("上海虹桥")
