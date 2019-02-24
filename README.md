@@ -52,7 +52,6 @@ CREATE TABLE `RouteStations` (
 ## 开源说明
 特别感谢Arnie97的使用MIT协议的开源项目emu-tools https://github.com/Arnie97/emu-tools 本项目部分使用了来自该项目提供的接口和代码。
 
-
 ## 考虑的方向
 -原则上讲，我们只收录目前尚在使用的站点信息。所有站名来自官方接口.但可能在2019.2.16之后废弃的站点不会得到删除。
 
