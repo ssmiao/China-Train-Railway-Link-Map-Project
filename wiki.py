@@ -47,14 +47,11 @@ class wikipedia(object):
 
             except (IndexError,AttributeError):
                 pass
-        else:
-            print('empty wiki!')
-        
     
+    #In next function,You have to:
+    # import aiohttp
+    # import asyncio
     async def async_find_location(self,session):
-        import aiohttp
-        import asyncio
-        
         wiki_url = self.base_url+quote(self.station_name+'站')
         async with session.get(wiki_url) as resp:
             if(resp.status == 404):

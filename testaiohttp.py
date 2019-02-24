@@ -7,6 +7,7 @@ import tqdm
 
 
 from wiki import wikipedia
+import googlemap
 
 station_url = 'https://kyfw.12306.cn/otn/resources/js/framework/station_name.js'
 tmis_params = {'limit': '', 'timestamp': '', 'sheng': '', 'shi': ''}
@@ -48,7 +49,7 @@ class station(object):
                     self.tmis = result['TMISM']
                 pbar_tmis.update(1)
     
-    ###todo:
+
     async def async_get_location(self,session,pbar_location):
         pbar_location.set_description("维基地点分析进度")        
         #调用维基百科
@@ -57,6 +58,16 @@ class station(object):
         self.longitude = wiki.longitude
         self.latitude = wiki.latitude
         pbar_location.update(1)
+    
+    async def async_get_google_location(self,session,pabr_google_location):
+        pabr_google_location.set_description("谷歌地点分析进度")
+        #调用谷歌地图
+        if(self.longitude == 0):
+            google = googlemap.google_search(self.station_name)
+            await google.async_find_geometry(session)
+            self.longitude = google.longitude
+            self.latitude = google.latitude
+        pabr_google_location.update(1)
 
 class async_station_init(object):
 
@@ -95,8 +106,15 @@ class async_station_init(object):
                 for station_i in self.station_dict:
                     await asyncio.create_task(self.station_dict[station_i].async_get_location(session_wiki_location,pbar_wiki_location))
 
+    async def get_google_location(self):
+        async with aiohttp.ClientSession() as session_google_location:
+            with tqdm.tqdm(total=len(self.station_dict),ncols=80) as pbar_google_location:  
+                for station_i in self.station_dict:
+                    await asyncio.create_task(self.station_dict[station_i].async_get_google_location(session_google_location,pbar_google_location))
+
 if __name__ == "__main__":
     async_station_init = async_station_init()
     # asyncio.run(async_station_init.get_basic_info())
     # asyncio.run(async_station_init.get_tmis())
-    asyncio.run(async_station_init.get_location())
+    asyncio.run(async_station_init.get_google_location())
+    # asyncio.run()
