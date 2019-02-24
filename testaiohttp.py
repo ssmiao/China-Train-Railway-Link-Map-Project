@@ -1,8 +1,12 @@
 import aiohttp
 import asyncio
 import json
+import re
 from urllib.request import urlopen
 import tqdm
+
+
+from wiki import wikipedia
 
 station_url = 'https://kyfw.12306.cn/otn/resources/js/framework/station_name.js'
 tmis_params = {'limit': '', 'timestamp': '', 'sheng': '', 'shi': ''}
@@ -43,6 +47,15 @@ class station(object):
                 if(self.station_name == result['HZZM']):
                     self.tmis = result['TMISM']
                 pbar_tmis.update(1)
+    
+    ###todo:
+    async def async_get_location(self,session,pbar_location):
+        #调用维基百科
+        wiki = wikipedia(self.station_name)
+        await asyncio.create_task(wiki.async_find_location(session))
+        self.longitude = wiki.longitude
+        self.latitude = wiki.latitude
+        pbar_location.update(1)
 
 class async_station_init(object):
 
@@ -54,9 +67,12 @@ class async_station_init(object):
             self.station_dict = {}
             for station_str in station_str_array:
                 station_name =station_str.split("|")[1]
+                if(re.findall(r' ',station_name)):
+                    continue
                 station_pym = station_str.split("|")[-2]
+                station_dbm = station_str.split("|")[2]
                 #创建所有车站的对象
-                locals()[station_name] = station(station_name,station_pym)
+                locals()[station_name] = station(station_name,pym = station_pym,dbm = station_dbm)
                 self.station_dict[station_name] = locals()[station_name]
                 pbar_async_init.update(1)
 
@@ -72,7 +88,14 @@ class async_station_init(object):
                 for station_i in self.station_dict:
                     await asyncio.create_task(self.station_dict[station_i].async_get_basic_info(session_basic_info,pbar_basic_info))
 
+    async def get_location(self):
+        async with aiohttp.ClientSession() as session_wiki_location:
+            with tqdm.tqdm(total=len(self.station_dict),ncols=80) as pbar_wiki_location:  
+                for station_i in self.station_dict:
+                    await asyncio.create_task(self.station_dict[station_i].async_get_location(session_wiki_location,pbar_wiki_location))
+
 if __name__ == "__main__":
     async_station_init = async_station_init()
-    asyncio.run(async_station_init.get_basic_info())
-    asyncio.run(async_station_init.get_tmis())
+    # asyncio.run(async_station_init.get_basic_info())
+    # asyncio.run(async_station_init.get_tmis())
+    asyncio.run(async_station_init.get_location())

@@ -5,6 +5,7 @@ from urllib.parse import quote
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
+
 import config
 import amap
 
@@ -45,6 +46,24 @@ class wikipedia(object):
 
             except IndexError :
                 pass
+    
+    async def async_find_location(self,session):
+        import aiohttp
+        import asyncio
+        
+        wiki_url = self.base_url+quote(self.station_name+'站')
+        async with session.post(wiki_url) as resp:
+            if(resp.status == 404):
+                wiki_url = self.base_url+quote(self.station_name+'乘降所')
+                async with session.post(wiki_url) as resp:
+                    assert resp.status == 200
+                    self.soup = BeautifulSoup(await resp.text(),features="lxml")
+            else:
+                assert resp.status == 200
+                self.soup = BeautifulSoup(await resp.text(),features="lxml")
+        self.have_looked = 1
+        self.find_location()
+
     
 def main():
     wiki = wikipedia("上海虹桥")
