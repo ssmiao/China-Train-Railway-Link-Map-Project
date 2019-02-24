@@ -5,6 +5,8 @@ from urllib.parse import quote
 from urllib.request import urlopen
 # from bs4 import BeautifulSoup
 import time
+import re
+import json
 
 import config
 import amap
@@ -32,8 +34,10 @@ class wikipedia(object):
             self.find_page()
         if(self.html != ''):
             try:
-                find = re.search(r'{"lat":.*?,"lon":.*?}',self.html.text)
-                print(json.loads(find.group())['lat'])
+                find = re.search(r'{"lat":.*?,"lon":.*?}',self.html)
+                # print(json.loads(find.group())['lat'])
+                self.longitude = json.loads(find.group())['lon']
+                self.latitude = json.loads(find.group())['lat']
 
                 #转化为高德坐标
                 amap_trans = amap.amap_trans(self.longitude,self.latitude)
@@ -43,6 +47,8 @@ class wikipedia(object):
 
             except IndexError :
                 pass
+        else:
+            print('empty wiki!')
         
     
     async def async_find_location(self,session):
@@ -50,10 +56,10 @@ class wikipedia(object):
         import asyncio
         
         wiki_url = self.base_url+quote(self.station_name+'站')
-        async with session.head(wiki_url) as resp:
+        async with session.get(wiki_url) as resp:
             if(resp.status == 404):
                 wiki_url = self.base_url+quote(self.station_name+'乘降所')
-                async with session.head(wiki_url) as resp:
+                async with session.get(wiki_url) as resp:
                     # print(resp.status)# == 200
                     self.html = await resp.text()
             else:
