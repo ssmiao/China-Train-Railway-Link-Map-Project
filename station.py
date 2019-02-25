@@ -136,7 +136,7 @@ class station(object):
         province_url = 'https://www.12306.cn/yjcx/doPickJZM'
         province_params = dict(param=self.pym, type=1, czlx=0)
         async with session.post(province_url,data = province_params) as resp:
-            assert resp.status == 200
+            # assert resp.status == 200
             data = json.loads(await resp.text())
             for result in data :
                 if(self.station_name == result['ZMHZ']):
