@@ -11,6 +11,13 @@ import config
 
 station_url = config.configs['station_url']
 
+'''
+For async_station:
+    like main()-->async_init(This File)-->async func in class 'station'
+    -->(maybe) next async func in other class
+
+todo:精简代码
+'''
 class async_station_init(object):
 
     def __init__(self):
@@ -44,15 +51,24 @@ class async_station_init(object):
 
     async def get_location(self):
         async with aiohttp.ClientSession() as session_wiki_location:
-            with tqdm.tqdm(total=len(self.station_dict),ncols=80,smoothing=0) as pbar_wiki_location:  
-                for station_i in self.station_dict:
-                    await asyncio.create_task(self.station_dict[station_i].async_get_location(session_wiki_location,pbar_wiki_location))
+            async with aiohttp.ClientSession() as session_amap:
+                with tqdm.tqdm(total=len(self.station_dict),ncols=80,smoothing=0) as pbar_wiki_location:  
+                    for station_i in self.station_dict:
+                        await asyncio.create_task(self.station_dict[station_i].async_get_location(session_wiki_location,session_amap,pbar_wiki_location))
 
     async def get_google_location(self):
         async with aiohttp.ClientSession() as session_google_location:
-            with tqdm.tqdm(total=len(self.station_dict),ncols=80,smoothing=0) as pbar_google_location:  
+            async with aiohttp.ClientSession() as session_amap:
+                with tqdm.tqdm(total=len(self.station_dict),ncols=80,smoothing=0) as pbar_google_location:  
+                    for station_i in self.station_dict:
+                        await asyncio.create_task(self.station_dict[station_i].async_get_google_location(session_google_location,session_amap,pbar_google_location))
+
+    async def get_amap_get_province(self):
+        async with aiohttp.ClientSession() as session_amap_province:
+            with tqdm.tqdm(total=len(self.station_dict),ncols=80,smoothing=0) as pbar_amap_province:  
                 for station_i in self.station_dict:
-                    await asyncio.create_task(self.station_dict[station_i].async_get_google_location(session_google_location,pbar_google_location))
+                    await asyncio.create_task(self.station_dict[station_i].async_amap_get_province(session_amap_province,pbar_amap_province))
+
 
     def tosql(self):
         for station_i in station_dict:

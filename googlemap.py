@@ -34,7 +34,7 @@ class google_search(object):
     #In next function,You have to:
     # import aiohttp
     # import asyncio
-    async def async_find_geometry(self,session):
+    async def async_find_geometry(self,session,session_amap):
         async with session.get(self.find_location_url) as resp:
             r_js = await resp.json()
             if(r_js['status']=='OK'):
@@ -43,9 +43,10 @@ class google_search(object):
 
                 #转化为高德坐标
                 amap_trans = amap.amap_trans(self.longitude,self.latitude)
-                amap_trans.trans()
+                amap_trans.async_trans(session_amap)
                 self.longitude = amap_trans.longitude
                 self.latitude = amap_trans.latitude
+
 
 if __name__ == "__main__":
     google = google_search('宋站')

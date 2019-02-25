@@ -130,6 +130,7 @@ class station(object):
                 amap_i.get_province()
                 self.province = amap_i.province
 
+    #从12306接口获取省份信息(异步)
     async def async_get_basic_info(self,session,pbar_basic_info):
         pbar_basic_info.set_description("basic_info进度")
         province_url = 'https://www.12306.cn/yjcx/doPickJZM'
@@ -137,13 +138,12 @@ class station(object):
         async with session.post(province_url,data = province_params) as resp:
             assert resp.status == 200
             data = json.loads(await resp.text())
-            # print(data)
             for result in data :
                 if(self.station_name == result['ZMHZ']):
                     self.province = result['SSJC']
-                    # print(self.station_name+':'+self.province)
             pbar_basic_info.update(1)
 
+    #从12306官方接口获取tmis信息(异步)    
     async def async_get_tmis(self,session,pbar_tmis):
         tmis_params = {'limit': '', 'timestamp': '', 'sheng': '', 'shi': ''}
         pbar_tmis.set_description("tmis进度")
@@ -157,26 +157,37 @@ class station(object):
                     self.tmis = result['TMISM']
                 pbar_tmis.update(1)
     
-
-    async def async_get_location(self,session,pbar_location):
+    #从维基百科获取经纬度信息(异步)
+    async def async_get_location(self,session_wiki,session_amap,pbar_location):
         pbar_location.set_description("维基地点分析进度")        
         #调用维基百科
         wiki = wikipedia(self.station_name)
-        await asyncio.create_task(wiki.async_find_location(session))
+        await asyncio.create_task(wiki.async_find_location(session_wiki,session_amap))
         self.longitude = wiki.longitude
         self.latitude = wiki.latitude
         pbar_location.update(1)
     
-    async def async_get_google_location(self,session,pabr_google_location):
+    #从谷歌地图获取经纬度信息（作为补充，异步）
+    async def async_get_google_location(self,session,session_amap,pabr_google_location):
         pabr_google_location.set_description("谷歌地点分析进度")
         #调用谷歌地图
         if(self.longitude == 0):
             google = googlemap.google_search(self.station_name)
-            await google.async_find_geometry(session)
+            await google.async_find_geometry(session,session_amap)
             self.longitude = google.longitude
             self.latitude = google.latitude
         pabr_google_location.update(1)
 
+    #从高德地图将经纬度转化为省份（作为补充，异步）
+    async def async_amap_get_province(self,session,pbar_amap_province):
+        pbar_amap_province.set_description("高德地图省份转换中")
+        #调用amap
+        if(self.province == 0):
+            amap_i = amap.get_search(self.longitude,self.latitude)
+            await amap_i.async_get_province(session)
+            self.province = amap_i.province
+        pbar_amap_province.update(1)
+    
     #添加站点到数据库
     def tosql(self):
         dbe = sql()
