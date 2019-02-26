@@ -12,15 +12,13 @@ configs = {
 },
 
 #列车等级信息
-'grade_list':["T","K","","D","Z","C","L","Y","G"],
+# 'grade_list':["T","K","","D","Z","C","L","Y","G"],
+'grade_list':['D','T','G','C','O','K','Z'],
 
 #第三方来源网址,分为前缀和后缀
 #这个站点用于提供大范围列车的时刻表，可能不能实时更新，但响应快
 'third_party_url' : ['http://qq.ip138.com/train/','.htm'],
 
-#官方站点信息
-#这个文件包含站名和拼音名，随实际状况更新，序号可能变化
-'station_url' : 'https://kyfw.12306.cn/otn/resources/js/framework/station_name.js',
 
 #中文维基百科主域名
 'wiki_url' : 'https://zh.wikipedia.org',
@@ -32,5 +30,14 @@ configs = {
 'amap_web_key' : 'ee57ba72408511a2322d64b3f65dc273',
 
 #谷歌地图api_key
-'google_key':'AIzaSyA7fsh-d7y5oWJL9HP64blPn3Zy--6_Vq8'
+'google_key':'AIzaSyA7fsh-d7y5oWJL9HP64blPn3Zy--6_Vq8',
+
+
+#官方站点信息
+#这个文件包含站名和拼音名，随实际状况更新，序号可能变化
+'station_url' : 'https://kyfw.12306.cn/otn/resources/js/framework/station_name.js',
+
+#这个文件包含列车车票发售期限内的列车安排，随实际情况更新
+'train_url' : 'https://kyfw.12306.cn/otn/resources/js/query/train_list.js'
+
 }

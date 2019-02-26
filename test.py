@@ -1,27 +1,16 @@
-# # -*- coding=utf-8 -*-
- 
-# import time
-# from tqdm import tqdm
+from bs4 import BeautifulSoup
+import requests
 
-# total = 1000
- 
-# def dosomework():
-#     time.sleep(0.01)
- 
-# # progress = ProgressBar()
-# for i in tqdm(range(10000)):
-#     dosomework()
-#     print('T')
+import config
+def main():
+    url = config.configs['third_party_url'][0] +'D1'+ config.configs['third_party_url'][1]
+    r = requests.get(url)
+    r.encoding = 'GB2312'
+    soup = BeautifulSoup(r.text,'lxml')
+    # soup.find_all("table",border="1")
+    print(soup.find_all("table",border="1",width="780")[1].find_all("td"))
 
-from tqdm import tqdm
-import time
 
-with tqdm(total=1000000,ncols=100) as pbar:
-    for i in range(1000000):
-        time.sleep(0.001)
-        mat = "{:10}"
-        pbar.set_description("Processing "+mat.format(str(i)))
-        pbar.update(1)
 
-# mat = "{:20}\t{:28}\t{:32}"
-# print(mat.format("占4个长度","占8个长度", "占12长度"))
+
+main()
