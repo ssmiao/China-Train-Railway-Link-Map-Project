@@ -71,7 +71,7 @@ class wikipedia(object):
 
             #转化为高德坐标
             amap_trans = amap.amap_trans(self.longitude,self.latitude)
-            amap_trans.async_trans(session_amap)
+            await amap_trans.async_trans(session_amap)
             self.longitude = amap_trans.longitude
             self.latitude = amap_trans.latitude
 

@@ -21,7 +21,9 @@ class train(object):
     async def find_train(self,session):
         train_timetable_url = train_timetable[0] + self.train_name +train_timetable[1]
         async with session.get(train_timetable_url) as resp:
-            soup = BeautiSoup(await resp.text())
+            print(resp.text())
+            # soup = BeautiSoup(await resp.text())
+            # print(soup)
     def tosql():
         db = sql()
         db.connect()
@@ -36,6 +38,7 @@ async def main():
     # print(str(tomorrow))
     resp = json.loads(requests.get(train_url).text[16:])[tomorrow]
     
+'''    
     for grade in grade_list:
        for train_dict in resp[grade]:
             train_name = re.match(r'.*\(',train_dict['station_train_code']).group()[:-1]
@@ -46,6 +49,6 @@ async def main():
         with tqdm.tqdm(total=len(grade_list),ncols=80,smoothing=0) as pbar_train:  
             for grade in grade_list:
                 await asyncio.create_task(locals()[train_name].find_train(session_train))
-
+'''
 if __name__ == "__main__":
     asyncio.run(main())

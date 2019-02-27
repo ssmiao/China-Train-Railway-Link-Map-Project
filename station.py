@@ -137,11 +137,14 @@ class station(object):
         province_params = dict(param=self.pym, type=1, czlx=0)
         async with session.post(province_url,data = province_params) as resp:
             # assert resp.status == 200
-            data = json.loads(await resp.text())
-            for result in data :
-                if(self.station_name == result['ZMHZ']):
-                    self.province = result['SSJC']
-            pbar_basic_info.update(1)
+            try:
+                data = json.loads(await resp.text())
+                for result in data :
+                    if(self.station_name == result['ZMHZ']):
+                        self.province = result['SSJC']
+                pbar_basic_info.update(1)
+            except ValueError :
+                pass
 
     #从12306官方接口获取tmis信息(异步)    
     async def async_get_tmis(self,session,pbar_tmis):
@@ -152,11 +155,14 @@ class station(object):
         tmis_params.update(q=self.station_name, ljdm=format(bureau, '02'))
         
         async with session.post(tmis_url,data = tmis_params) as resp:
-            for result in json.loads(await resp.text()):
-                if(self.station_name == result['HZZM']):
-                    self.tmis = result['TMISM']
-                pbar_tmis.update(1)
-    
+            try:
+                for result in json.loads(await resp.text()):
+                    if(self.station_name == result['HZZM']):
+                        self.tmis = result['TMISM']
+            except ValueError :
+                pass
+        pbar_tmis.update(1)
+        
     #从维基百科获取经纬度信息(异步)
     async def async_get_location(self,session_wiki,session_amap,pbar_location):
         pbar_location.set_description("维基地点分析进度")        

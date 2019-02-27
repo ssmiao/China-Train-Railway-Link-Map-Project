@@ -43,9 +43,9 @@ class amap_trans(object):
         
     async def async_trans(self,session_amap):
         async with session_amap.get(self.trans_url) as resp:
-            if(await resp.json()['info']=='ok'):
-                self.longitude = await resp.json()['locations'].split(',')[0]
-                self.latitude = await resp.json()['locations'].split(',')[1]
+            if((await resp.json())['info']=='ok'):
+                self.longitude = (await resp.json())['locations'].split(',')[0]
+                self.latitude = (await resp.json())['locations'].split(',')[1]
 
 def main():
     # amap = amap_search(114.170074327257,22.301303439671)
