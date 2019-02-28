@@ -33,8 +33,18 @@ class sql(object):
         return rev_data
 
     #加入火车线路信息到数据库
-    def addline(self,pym,train_name,first_site,terminus,viasite):
-        pass#INSERT INTO 表名称 VALUES (值1, 值2,....)
+    def addline(self,train_name,viasite):
+        
+        #添加基础信息到Trains表
+        self._cursor.execute('INSERT INTO Trains (Train_name,Grade) VAlUES (\'' + train_name +'\',\''+ train_name[0] + '\') on DUPLICATE KEY UPDATE RouteId = RouteId;')
+        self._db.commit()        
+
+        #todo：添加信息到RouteStations表
+        for station_No in range(len(viasite)):
+            self._cursor.execute('INSERT INTO RouteStation (Train_name,Station,Station_No) VAlUES (\'' + train_name +'\',\''+ viasite[station_No] +'\',\''+str(station_No)+ '\') on DUPLICATE KEY UPDATE RouteStationId = RouteStationId;')
+            self._db.commit()        
+
+        #INSERT INTO 表名称 VALUES (值1, 值2,....)
     
     #加入火车站点信息到数据库
     def addStation(self,station_name,pym,tmis,dbm,province,longitude,latitude):

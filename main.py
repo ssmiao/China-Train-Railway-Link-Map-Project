@@ -11,11 +11,11 @@ def main():
     # st = station()
     # st.init_station_str()
     async_station = async_station_init()
-#     asyncio.run(async_station.get_basic_info())
-#     asyncio.run(async_station.get_tmis())
-    asyncio.run(async_station.get_location())
-    asyncio.run(async_station.get_google_location())
-    asyncio.run(async_station.get_amap_get_province())
+    asyncio.run(async_station.get_basic_info())
+    asyncio.run(async_station.get_tmis())
+#     asyncio.run(async_station.get_location())
+#     asyncio.run(async_station.get_google_location())
+#     asyncio.run(async_station.get_amap_get_province())
     async_station.tosql()
 
 if __name__ == "__main__":

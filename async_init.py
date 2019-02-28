@@ -71,5 +71,5 @@ class async_station_init(object):
 
 
     def tosql(self):
-        for station_i in station_dict:
-            self.station_dict[station].tosql()
+        for station_i in self.station_dict:
+            self.station_dict[station_i].tosql()
