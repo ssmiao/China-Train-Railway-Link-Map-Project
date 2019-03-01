@@ -40,12 +40,15 @@ class sql(object):
         self._db.commit()        
 
         #添加信息到RouteStations表
+        no_found_station_array = []   #准备一个数组存放Stations里没有对应的站点
         for station_No in range(len(viasite)):#以防站点数据库不完善
             try:
                 self._cursor.execute('INSERT INTO RouteStation (Train_name,Station,Station_No) VAlUES (\'' + train_name +'\',\''+ viasite[station_No] +'\',\''+str(station_No)+ '\') on DUPLICATE KEY UPDATE RouteStationId = RouteStationId;')
-                self._db.commit()        
+                self._db.commit()
             except pymysql.IntegrityError :
-                print(viasite[station_No])
+                no_found_station_array.append(viasite[station_No])
+
+        return no_found_station_array
         #INSERT INTO 表名称 VALUES (值1, 值2,....)
     
     #加入火车站点信息到数据库
@@ -77,8 +80,8 @@ class sql(object):
         
         #更新经纬度信息
         if(longitude != 0):
-            self._cursor.execute('UPDATE Stations SET longitude = \''+ longitude +' \' WHERE Station = \''+station_name+'\';')
-            self._cursor.execute('UPDATE Stations SET latitude = \''+ latitude +' \' WHERE Station = \''+station_name+'\';')            
+            self._cursor.execute('UPDATE Stations SET longitude = \''+ str(longitude) +' \' WHERE Station = \''+station_name+'\';')
+            self._cursor.execute('UPDATE Stations SET latitude = \''+ str(latitude) +' \' WHERE Station = \''+station_name+'\';')            
             self._db.commit()
 
 def main():

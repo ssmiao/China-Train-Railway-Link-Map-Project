@@ -6,24 +6,19 @@ import datetime
 from sql import sql
 import config
 
-train_viasite_url = config.configs['train_viasite_url']
-def find_viasite(offical_train_no):
-    url = train_viasite_url + 'train_no=' + offical_train_no + '&depart_date=' + str(datetime.date.today() + datetime.timedelta(days=1))
+train_viasite_timetable_url = config.configs['train_viasite_timetable_url']
+
+# train_no=240000G1010I         #火车序列号
+# &from_station_telecode=VNP    #出发站电报码
+# &to_station_telecode=AOH      #到达站电报码
+# &depart_date=2019-03-02'      #出发日期
+
+def find_viasite(offical_train_no,dbm0,dbm1):
+    url = train_viasite_timetable_url + 'train_no=' + offical_train_no +'&from_station_telecode='+ dbm0 +'&to_station_telecode='+ dbm1 + '&depart_date=' + str(datetime.date.today() + datetime.timedelta(days=1))
     print(url)
-    # url = config.configs['third_party_url'][0] +train_no+ config.configs['third_party_url'][1]
     r = requests.get(url)
     print(r.json())
-    # r.encoding = 'GB2312'
-    # soup = BeautifulSoup(r.text,'lxml')
-    # soup.find_all("table",border="1")
 
-    # viasite = []
-    # for line in re.findall(r'onclick="setFrom\(.*?,',str(soup.find_all("table",border="1",width="780")[1])):
-    #     viasite.append(line[18:-2])
-    #     # print(line[18:-2])
-    # print(viasite)
-    # return viasite
-    
 def tosql(train_name,viasite):
     tosql_i = sql()
     tosql_i.connect()
@@ -31,5 +26,5 @@ def tosql(train_name,viasite):
     print('OK')
     tosql_i.close()
 
-find_viasite('0h00000D280L')
+find_viasite('240000G1010I','VNP','AOH')
 # tosql('G1',find_viasite('G1'))

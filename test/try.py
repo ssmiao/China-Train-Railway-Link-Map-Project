@@ -1,19 +1,16 @@
-import requests,datetime,json,re
+import requests
+import json
 
-url = 'https://kyfw.12306.cn/otn/resources/js/query/train_list.js'
+temp_strange_basic_url = 'https://www.12306.cn/index/otn/index12306/queryStopStations?'
 
-resp = requests.get(url)
-
-tomorrow = str(datetime.date.today() + datetime.timedelta(days=1))
-resp = json.loads(requests.get(url).text[16:])[tomorrow]   
-
-train_name_array = []
-for train_dict_i in resp['D']:
-    temp_list = re.match(r'.*?-',train_dict_i['station_train_code']).group()[:-1].split('(')
-    train_name = temp_list[0]
-    first_site = temp_list[1]    
-    print(train_name+'  '+first_site)
-    offical_train_no = train_dict_i['train_no']
-    train_name_array.append(train_name)
-
-# print(train_name_array)
+# offical_train_no='25000K765101'
+offical_train_no='240000G1010I'
+depart_date='2019-03-01'
+# for station in station_array:
+temp_strange_url = temp_strange_basic_url +'train_no=' + offical_train_no + '&depart_date=' + depart_date
+resp = requests.get(temp_strange_url)
+re = resp.json()['data']
+dbm_dict = {}
+for tag in re:
+    dbm_dict[re[tag][0]] = re[tag][1]
+print(dbm_dict)

@@ -39,11 +39,23 @@ configs = {
 #这个文件包含列车车票发售期限内的列车安排，随实际情况更新
 'train_url' : 'https://kyfw.12306.cn/otn/resources/js/query/train_list.js',
 
-#这儿可以查到某辆火车的途径站点 -->暂未使用
-'train_viasite_url' : 'https://www.12306.cn/index/otn/index12306/queryStopStations?'
+#这儿可以查到某辆火车的途径站点 
+'train_viasite_url' : 'https://www.12306.cn/index/otn/index12306/queryStopStations?',
 #必填参数也是仅有的参数：
 # train_no=5e0000K42291  #火车序列号
 # &depart_date=2019-02-1 #日期
+
+#这儿可以查到某辆火车某天的时刻表和途径站点 -->尚未使用
+'train_viasite_timetable_url' : 'https://kyfw.12306.cn/otn/czxx/queryByTrainNo?'
+#必填参数也是仅有的参数如下：
+# train_no=240000G1010I         #火车序列号
+# &from_station_telecode=VNP    #出发站电报码
+# &to_station_telecode=AOH      #到达站电报码
+# &depart_date=2019-03-02'      #出发日期
+
+
+#尚未解析好的api：
+#https://www.12306.cn/mormhweb/kyyyz/beijing/201001/t20100124_1165.html
 
 
 }

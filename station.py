@@ -23,6 +23,7 @@ station_url = config.configs['station_url']
 #这个文件包含站名和拼音名，随实际状况更新，序号可能变化 
 
 class station(object):
+    
     def __init__(self,station_name ='',pym='',tmis='',dbm='',province='',longitude=0,latitude=0):
                 #是站点名称station_name，拼音码pym，中国车站代码tmis，电报码dbm,经度longitude，纬度latitude
         self.station_name = station_name
@@ -53,7 +54,7 @@ class station(object):
             
             mat = "{:10}"
             
-            #排除某些含有空格的站点（水用站点？）
+            #排除某些含有空格的站点（12306在储存环线如D7154（三亚-->三 亚）时将和起始站名字相同的终点站第一个字后面加一个空格以示区别）
             if(re.findall(r' ',self.station_name)):
                 continue
 
@@ -70,7 +71,7 @@ class station(object):
             self.pym = self.station_str.split("|")[-2] #站点拼音码
             self.dbm = self.station_str.split("|")[2]
 
-    #从12306官方接口获取tmis信息
+    #从12306货运接口获取tmis信息
     def get_tmis(self):
         name = self.station_name 
         bureau=0
@@ -188,7 +189,7 @@ class station(object):
     async def async_amap_get_province(self,session,pbar_amap_province):
         pbar_amap_province.set_description("高德地图省份转换中")
         #调用amap
-        if(self.province == 0):
+        if(self.province == ''):
             amap_i = amap.get_search(self.longitude,self.latitude)
             await amap_i.async_get_province(session)
             self.province = amap_i.province
