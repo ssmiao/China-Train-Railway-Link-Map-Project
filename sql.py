@@ -33,17 +33,19 @@ class sql(object):
         return rev_data
 
     #加入火车线路信息到数据库
-    def addline(self,train_name,viasite):
+    def addline(self,train_name,viasite,offical_train_no):
         
         #添加基础信息到Trains表
-        self._cursor.execute('INSERT INTO Trains (Train_name,Grade) VAlUES (\'' + train_name +'\',\''+ train_name[0] + '\') on DUPLICATE KEY UPDATE RouteId = RouteId;')
+        self._cursor.execute('INSERT INTO Trains (Train_name,Grade,offical_train_no) VAlUES (\'' + train_name +'\',\''+ train_name[0] +'\',\''+ offical_train_no + '\') on DUPLICATE KEY UPDATE RouteId = RouteId;')
         self._db.commit()        
 
-        #todo：添加信息到RouteStations表
-        for station_No in range(len(viasite)):
-            self._cursor.execute('INSERT INTO RouteStation (Train_name,Station,Station_No) VAlUES (\'' + train_name +'\',\''+ viasite[station_No] +'\',\''+str(station_No)+ '\') on DUPLICATE KEY UPDATE RouteStationId = RouteStationId;')
-            self._db.commit()        
-
+        #添加信息到RouteStations表
+        for station_No in range(len(viasite)):#以防站点数据库不完善
+            try:
+                self._cursor.execute('INSERT INTO RouteStation (Train_name,Station,Station_No) VAlUES (\'' + train_name +'\',\''+ viasite[station_No] +'\',\''+str(station_No)+ '\') on DUPLICATE KEY UPDATE RouteStationId = RouteStationId;')
+                self._db.commit()        
+            except pymysql.IntegrityError :
+                print(viasite[station_No])
         #INSERT INTO 表名称 VALUES (值1, 值2,....)
     
     #加入火车站点信息到数据库

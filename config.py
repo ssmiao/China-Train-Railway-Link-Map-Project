@@ -16,9 +16,8 @@ configs = {
 'grade_list':['D','T','G','C','O','K','Z'],
 
 #第三方来源网址,分为前缀和后缀
-#这个站点用于提供大范围列车的时刻表，可能不能实时更新，但响应快
+#这个站点用于提供大范围列车的时刻表，可能不能实时更新，但响应快 -->已更换成官方接口
 'third_party_url' : ['http://qq.ip138.com/train/','.htm'],
-
 
 #中文维基百科主域名
 'wiki_url' : 'https://zh.wikipedia.org',
@@ -34,10 +33,17 @@ configs = {
 
 
 #官方站点信息
-#这个文件包含站名和拼音名，随实际状况更新，序号可能变化
+#这个文件包含站名和拼音名，随实际状况更新，序号可能变化,(事实证明并不完整，如赛乌苏站，叶榭站..etc（截止于2019.3.1)）
 'station_url' : 'https://kyfw.12306.cn/otn/resources/js/framework/station_name.js',
 
 #这个文件包含列车车票发售期限内的列车安排，随实际情况更新
-'train_url' : 'https://kyfw.12306.cn/otn/resources/js/query/train_list.js'
+'train_url' : 'https://kyfw.12306.cn/otn/resources/js/query/train_list.js',
+
+#这儿可以查到某辆火车的途径站点 -->暂未使用
+'train_viasite_url' : 'https://www.12306.cn/index/otn/index12306/queryStopStations?'
+#必填参数也是仅有的参数：
+# train_no=5e0000K42291  #火车序列号
+# &depart_date=2019-02-1 #日期
+
 
 }

@@ -69,7 +69,6 @@ class async_station_init(object):
                 for station_i in self.station_dict:
                     await asyncio.create_task(self.station_dict[station_i].async_amap_get_province(session_amap_province,pbar_amap_province))
 
-
     def tosql(self):
         for station_i in self.station_dict:
             self.station_dict[station_i].tosql()
