@@ -190,7 +190,7 @@ class station(object):
         pbar_amap_province.set_description("高德地图省份转换中")
         #调用amap
         if(self.province == ''):
-            amap_i = amap.get_search(self.longitude,self.latitude)
+            amap_i = amap.amap_search(self.longitude,self.latitude)
             await amap_i.async_get_province(session)
             self.province = amap_i.province
         pbar_amap_province.update(1)
