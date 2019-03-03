@@ -17,9 +17,15 @@ tqdm ~~bs4~~ requests pymysql lxml aiohttp
 ### 数据库依赖
 使用了Mariadb，理论上这个量级的数据大多数数据库都可以处理。
 
-目前有三张表。
+推荐直接使用已经建立好的数据库docker来部署。
+当然你也可以直接使用[init.sql](init.sql)中的DDL语句自行部署。
 
-参见init.sql
+```
+sudo docker push farthing0/cntrain_sql:0.0.10.alpha  #todo:改善版本号命名
+
+sudo docker run -p 0.0.0.0:3306:3306 cntrain_sql:0.0.10.alpha
+
+```
 
 ### 网络说明
 
@@ -45,6 +51,6 @@ tqdm ~~bs4~~ requests pymysql lxml aiohttp
 
 第一个小功能是一个交互式界面，将用于实时展示当前火车到站信息。
 
-##进度说明
+## 进度说明
 
 站点和列车数据库基本搭建完毕。
