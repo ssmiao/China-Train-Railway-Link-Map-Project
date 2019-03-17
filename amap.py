@@ -25,7 +25,7 @@ class amap_search(object):
     async def async_get_province(self,session):
         async with session.get(self.get_province_url) as resp:
             if((await resp.json())['info'] == 'OK'):
-                full_province = await resp.json()['regeocode']['addressComponent']['province']
+                full_province = (await resp.json())['regeocode']['addressComponent']['province']
                 self.province = full_abbr_province_dict[full_province]
 
 class amap_trans(object):
