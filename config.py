@@ -2,11 +2,11 @@
 
 configs = {
 
-#SQLData
+#SQLData #也是Docker默认信息。如您已经自行修改，请替换成相应值。
 'db':{
     'host':'127.0.0.1',
     'user' : 'CNTrain',
-    'password' : 'password',
+    'password' : 'CNTrain',
     'db' : 'CNTrain',
     'port':3306
 },
